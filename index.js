@@ -25,6 +25,7 @@ CUB.ready(function () {
         var ligne = lignes_1[_i];
         createLigne(ligne.ligneGid, ligne.nom, ligne.color);
         createVehicule(ligne.ligneGid, ligne.label, ligne.color);
+        createVehiculeOnTime(ligne.ligneGid, ligne.label, ligne.color);
     }
 });
 /**
@@ -55,13 +56,39 @@ function createVehicule(ligneGid, label, color) {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
-        wfsFilter: "<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>".concat(ligneGid, "</Literal></PropertyIsEqualTo><PropertyIsGreaterThan><PropertyName>retard</PropertyName><Literal>60</Literal></PropertyIsGreaterThan></AND>"),
+        wfsFilter: "<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>".concat(ligneGid, "</Literal></PropertyIsEqualTo><PropertyIsGreaterThan><PropertyName>retard</PropertyName><Literal>30</Literal></PropertyIsGreaterThan></AND>"),
         propertyname: ['GEOM', 'TERMINUS', 'RETARD'],
         loadAllAtOnce: true,
         refreshInterval: 10000,
         style: new CUB.Style({
             symbol: "https://data.bordeaux-metropole.fr/opendemos/assets/images/saeiv/tram_".concat(label.toLowerCase(), ".png"),
             opacity: 100,
+            size: 10,
+            labelColor: new CUB.Color(color),
+            labelOutlineWidth: 1.5,
+            labelSize: 12,
+            labelBold: true,
+            label: '${TERMINUS} - ${RETARD}',
+            labelYOffset: -15,
+            labelMaxScaledenom: 25000
+        })
+    });
+}
+/**
+ * Crée la couche des véhivules
+ */
+function createVehiculeOnTime(ligneGid, label, color) {
+    var layer = new CUB.Layer.Dynamic('Tram ' + label, 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
+        layerName: 'SV_VEHIC_P',
+        // Filtre sur l'ID de la ligne + uniquement les chemins principaux
+        // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
+        wfsFilter: "<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>".concat(ligneGid, "</Literal></PropertyIsEqualTo><PropertyIsLowerThan><PropertyName>retard</PropertyName><Literal>31</Literal></PropertyIsGreaterThan></AND>"),
+        propertyname: ['GEOM', 'TERMINUS', 'RETARD'],
+        loadAllAtOnce: true,
+        refreshInterval: 10000,
+        style: new CUB.Style({
+            symbol: "https://data.bordeaux-metropole.fr/opendemos/assets/images/saeiv/tram_".concat(label.toLowerCase(), ".png"),
+            opacity: 40,
             size: 10,
             labelColor: new CUB.Color(color),
             labelOutlineWidth: 1.5,
