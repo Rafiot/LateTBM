@@ -94,7 +94,7 @@ function createVehiculeOnTime(ligneGid: number, label: string, color: string) {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
-        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsLowerThan><PropertyName>retard</PropertyName><Literal>31</Literal></PropertyIsLowerThan></AND>`,
+        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsLessThan><PropertyName>retard</PropertyName><Literal>31</Literal></PropertyIsLessThan></AND>`,
         propertyname: ['GEOM', 'TERMINUS', 'RETARD'],
         loadAllAtOnce: true,
         refreshInterval: 10000,
