@@ -63,7 +63,7 @@ function createLigne(ligneGid: number, nom: string, color: string) {
  * Crée la couche des véhivules
  */
 function createVehicule(ligneGid: number, label: string, color: string) {
-    const layer = new CUB.Layer.Dynamic('Tram ' + label, 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
+    const layer = new CUB.Layer.Dynamic('Tram ' + label + "à l'heure", 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
