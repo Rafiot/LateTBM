@@ -31,6 +31,7 @@ CUB.ready(() => {
     for(const ligne of lignes) {
         createLigne(ligne.ligneGid, ligne.nom, ligne.color);
         createVehicule(ligne.ligneGid, ligne.label, ligne.color);
+        createVehiculeOnTime(ligne.ligneGid, ligne.label, ligne.color);
     }
 });
 
@@ -66,7 +67,7 @@ function createVehicule(ligneGid: number, label: string, color: string) {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
-        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsGreaterThan><PropertyName>retard</PropertyName><Literal>60</Literal></PropertyIsGreaterThan></AND>`,
+        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsGreaterThan><PropertyName>retard</PropertyName><Literal>30</Literal></PropertyIsGreaterThan></AND>`,
         propertyname: ['GEOM', 'TERMINUS', 'RETARD'],
         loadAllAtOnce: true,
         refreshInterval: 10000,
@@ -84,6 +85,34 @@ function createVehicule(ligneGid: number, label: string, color: string) {
         })
     });
 }
+
+/**
+ * Crée la couche des véhivules
+ */
+function createVehiculeOnTime(ligneGid: number, label: string, color: string) {
+    const layer = new CUB.Layer.Dynamic('Tram ' + label, 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
+        layerName: 'SV_VEHIC_P',
+        // Filtre sur l'ID de la ligne + uniquement les chemins principaux
+        // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
+        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsLowerThan><PropertyName>retard</PropertyName><Literal>31</Literal></PropertyIsGreaterThan></AND>`,
+        propertyname: ['GEOM', 'TERMINUS', 'RETARD'],
+        loadAllAtOnce: true,
+        refreshInterval: 10000,
+        style: new CUB.Style({ // Style par défaut
+            symbol: `https://data.bordeaux-metropole.fr/opendemos/assets/images/saeiv/tram_${label.toLowerCase()}.png`,
+            opacity: 40,
+            size: 10,
+            labelColor: new CUB.Color(color),
+            labelOutlineWidth: 1.5,
+            labelSize: 12,
+            labelBold: true,
+            label: '${TERMINUS} - ${RETARD}', // Libellé de l'étiquette
+            labelYOffset: -15,
+            labelMaxScaledenom: 25000
+        })
+    });
+}
+
 
 /**
  * Fin de chargement d'une couche WFS
