@@ -63,7 +63,7 @@ function createLigne(ligneGid: number, nom: string, color: string) {
  * Crée la couche des véhivules
  */
 function createVehicule(ligneGid: number, label: string, color: string) {
-    const layer = new CUB.Layer.Dynamic('Tram ' + label + "à l'heure", 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
+    const layer = new CUB.Layer.Dynamic('Tram ' + label + "en retard", 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
@@ -90,21 +90,21 @@ function createVehicule(ligneGid: number, label: string, color: string) {
  * Crée la couche des véhivules
  */
 function createVehiculeOnTime(ligneGid: number, label: string, color: string) {
-    const layer = new CUB.Layer.Dynamic('Tram ' + label, 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
+    const layer = new CUB.Layer.Dynamic('Tram ' + label + "à l'heure", 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
-        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsLowerThan><PropertyName>retard</PropertyName><Literal>31</Literal></PropertyIsGreaterThan></AND>`,
+        wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsLowerThan><PropertyName>retard</PropertyName><Literal>31</Literal></PropertyIsLowerThan></AND>`,
         propertyname: ['GEOM', 'TERMINUS', 'RETARD'],
         loadAllAtOnce: true,
         refreshInterval: 10000,
         style: new CUB.Style({ // Style par défaut
             symbol: `https://data.bordeaux-metropole.fr/opendemos/assets/images/saeiv/tram_${label.toLowerCase()}.png`,
-            opacity: 40,
+            opacity: 75,
             size: 10,
             labelColor: new CUB.Color(color),
-            labelOutlineWidth: 1.5,
-            labelSize: 12,
+            labelOutlineWidth: 1,
+            labelSize: 9,
             labelBold: true,
             label: '${TERMINUS} - ${RETARD}', // Libellé de l'étiquette
             labelYOffset: -15,
