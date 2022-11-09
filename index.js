@@ -24,8 +24,8 @@ CUB.ready(function () {
     for (var _i = 0, lignes_1 = lignes; _i < lignes_1.length; _i++) {
         var ligne = lignes_1[_i];
         createLigne(ligne.ligneGid, ligne.nom, ligne.color);
-        createVehicule(ligne.ligneGid, ligne.label, ligne.color);
         createVehiculeOnTime(ligne.ligneGid, ligne.label, ligne.color);
+        createVehicule(ligne.ligneGid, ligne.label, ligne.color);
     }
 });
 /**
@@ -52,7 +52,7 @@ function createLigne(ligneGid, nom, color) {
  * Crée la couche des véhivules
  */
 function createVehicule(ligneGid, label, color) {
-    var layer = new CUB.Layer.Dynamic('Tram ' + label + "en retard", 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
+    var layer = new CUB.Layer.Dynamic("Tram ".concat(label, " en retard"), 'https://data.bordeaux-metropole.fr/wfs?key=258BILMNYZ', {
         layerName: 'SV_VEHIC_P',
         // Filtre sur l'ID de la ligne + uniquement les chemins principaux
         // wfsFilter: `<AND><PropertyIsEqualTo><PropertyName>RS_SV_LIGNE_A</PropertyName><Literal>${ligneGid}</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>etat</PropertyName><Literal>RETARD</Literal></PropertyIsEqualTo></AND>`,
@@ -88,11 +88,11 @@ function createVehiculeOnTime(ligneGid, label, color) {
         refreshInterval: 10000,
         style: new CUB.Style({
             symbol: "https://data.bordeaux-metropole.fr/opendemos/assets/images/saeiv/tram_".concat(label.toLowerCase(), ".png"),
-            opacity: 75,
-            size: 10,
+            opacity: 50,
+            size: 8,
             labelColor: new CUB.Color(color),
             labelOutlineWidth: 1,
-            labelSize: 9,
+            labelSize: 10,
             labelBold: true,
             label: '${TERMINUS} - ${RETARD}',
             labelYOffset: -15,
